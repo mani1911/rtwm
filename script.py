@@ -1,33 +1,34 @@
 import os
 from dotenv import load_dotenv
-import json
 from pymongo import MongoClient
+from rq import Queue
+from rq.job import Job
+import redis
 
-from helpers import fetch_data
+from helpers import fetch_data, insert_weather_info
 
 load_dotenv()
+redis_connection = redis.Redis(host='localhost', port=6379, db=0)
 
 api_key = os.getenv('API_KEY')
 api_url = f'{os.getenv('API_URL')}?lat={13.0843}&lon={80.2705}&appid={api_key}'
-mongo_uri = "mongodb://{}:{}@{}:{}/{}?authSource=admin".format(os.getenv('MONGO_INITDB_ROOT_USERNAME'), os.getenv('MONGO_INITDB_ROOT_PASSWORD'), "localhost", os.getenv('ME_CONFIG_MONGODB_PORT'), os.getenv('DATABASE'))
 
-client = MongoClient(mongo_uri)
+# collection = db["weather-data"]
 
-print(f'mongodb://{os.getenv('MONGO_INITDB_ROOT_USERNAME')}:{os.getenv('MONGO_INITDB_ROOT_PASSWORD')}@localhost:{os.getenv('ME_CONFIG_MONGODB_PORT')}/{os.getenv('DATABASE')}?retryWrites=true&w=majority')
-
-db = client[os.getenv('DATABASE')]
-collection = db["test"]
-
-# # print(collection)
-# print([row for row in collection.find()])
+q = Queue('add_weather_entry', connection=redis_connection)
 
 weather_data = fetch_data(api_url)
-print(weather_data)
 if weather_data is not None:
     main = weather_data["weather"][0]["main"]
     feels_like = weather_data["main"]["feels_like"] - 273.15
     temp = weather_data["main"]["temp"] - 273.15
     dt = weather_data["dt"]
     
+    # main = "hellp"
+    # feels_like = "warm"
+    # temp = 32
+    # dt = 100
     print(main, feels_like, temp, dt)
+    job = q.enqueue(insert_weather_info, main, feels_like, temp, dt)
+
     

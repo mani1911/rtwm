@@ -1,5 +1,3 @@
-version: "3.5"
-
 services:
   mongo:
     image: mongo:latest
@@ -15,6 +13,7 @@ services:
       - weather-network
     volumes:
       - ./data/mongo_db:/data/db
+
   mongo-express:
     image: mongo-express:latest
     container_name: mongo-express
@@ -33,6 +32,12 @@ services:
       - weather-network
     depends_on:
       - mongo
+  
+  redis:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - 6379:6379
 
 networks:
   weather-network:
