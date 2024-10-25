@@ -7,7 +7,7 @@
 1. Clone the repository
 
 2. Create a virtual environment for the python server by running\
-  ```cd server &&  virtualenv venv && source venv/bin/activate```
+  ```virtualenv venv && source venv/bin/activate```
 
 3. Install all the necessary packages by running\
    ```pip install -r requirements.txt```
