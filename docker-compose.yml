@@ -1,7 +1,7 @@
 services:
   mongo:
     image: mongo:latest
-    container_name: mongo
+    container_name: rtwm_mongo
     env_file:
       - .env
     environment:
@@ -10,13 +10,13 @@ services:
     ports:
       - ${ME_CONFIG_MONGODB_PORT}:${ME_CONFIG_MONGODB_PORT} 
     networks:
-      - weather-network
+      - rtwm_network
     volumes:
       - ./data/mongo_db:/data/db
 
   mongo-express:
     image: mongo-express:latest
-    container_name: mongo-express
+    container_name: rtwm_mongo_express
     env_file:
       - .env
     environment:
@@ -29,17 +29,32 @@ services:
     ports:
       - 8081:8081
     networks:
-      - weather-network
+      - rtwm_network
     depends_on:
       - mongo
   
   redis:
     image: redis:6.2-alpine
+    container_name: rtwm_redis
     restart: always
     ports:
       - 6379:6379
+    networks:
+      - rtwm_network
+
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: rtwm_grafana
+    restart: always
+    # volumes:
+    #  - ./data/grafana:/var/lib/grafana
+    #  - /var/lib/grafana/plugins
+    ports:
+     - 3000:3000
+    networks:
+      - rtwm_network
 
 networks:
-  weather-network:
-    name: weather-network
+  rtwm_network:
+    name: rtwm_network
     driver: bridge

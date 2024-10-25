@@ -1,6 +1,6 @@
 # Real Time Weather Monitor Pipeline
-- A real time weather monitoring pipeline that fetches data from Open Weather API and adds to database as a cron asynchronously using redis worker.
-- Data visualization is done using Elastic Search and Kibana
+- A real time weather monitoring pipeline that fetches data from Open Weather API (every k mintues) and adds to database as a cron asynchronously using redis worker.
+- Data visualization is done using Grafana and MongoDB
 
 ## Setup
 
