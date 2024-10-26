@@ -5,7 +5,7 @@
 ---
 
 ## Architecture 
-![image info](rtwm.png)
+![image info](rtwm-arch.png)
 
 ---
 
