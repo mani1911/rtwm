@@ -2,6 +2,13 @@
 - A real time weather monitoring pipeline that fetches data from Open Weather API (every k mintues) and adds to database as a cron asynchronously using redis worker.
 - Data visualization is done using Grafana and MongoDB
 
+---
+
+## Architecture 
+![image info](rtwm.png)
+
+---
+
 ## Setup
 
 1. Clone the repository
